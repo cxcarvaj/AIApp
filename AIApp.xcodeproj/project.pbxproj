@@ -6,17 +6,32 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		FBD237772DF6129A00A9B084 /* AIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBD237732DF6129A00A9B084 /* AIApp.swift */; };
+		FBD237782DF6129A00A9B084 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBD237752DF6129A00A9B084 /* ContentView.swift */; };
+		FBD237792DF6129A00A9B084 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FBD237742DF6129A00A9B084 /* Assets.xcassets */; };
+		FBD2377D2DF612A100A9B084 /* Anime1.mlpackage in Sources */ = {isa = PBXBuildFile; fileRef = FBD2377A2DF612A100A9B084 /* Anime1.mlpackage */; };
+		FBD2377E2DF612A100A9B084 /* FastViTT8F16.mlpackage in Sources */ = {isa = PBXBuildFile; fileRef = FBD2377B2DF612A100A9B084 /* FastViTT8F16.mlpackage */; };
+		FBD237802DF6131900A9B084 /* ModelsVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBD2377F2DF6131900A9B084 /* ModelsVM.swift */; };
+		FBD237822DF61C1900A9B084 /* VisionLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBD237812DF61C1900A9B084 /* VisionLibraryView.swift */; };
+		FBD237842DF6201400A9B084 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBD237832DF6201400A9B084 /* Enums.swift */; };
+		FBD237862DF722F300A9B084 /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBD237852DF722F300A9B084 /* UIImage.swift */; };
+		FBD237882DF7D58E00A9B084 /* CameraPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBD237872DF7D58E00A9B084 /* CameraPickerView.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		FBD237652DF6117E00A9B084 /* AIApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AIApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FBD237732DF6129A00A9B084 /* AIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIApp.swift; sourceTree = "<group>"; };
+		FBD237742DF6129A00A9B084 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		FBD237752DF6129A00A9B084 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		FBD2377A2DF612A100A9B084 /* Anime1.mlpackage */ = {isa = PBXFileReference; lastKnownFileType = folder.mlpackage; path = Anime1.mlpackage; sourceTree = "<group>"; };
+		FBD2377B2DF612A100A9B084 /* FastViTT8F16.mlpackage */ = {isa = PBXFileReference; lastKnownFileType = folder.mlpackage; path = FastViTT8F16.mlpackage; sourceTree = "<group>"; };
+		FBD2377F2DF6131900A9B084 /* ModelsVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelsVM.swift; sourceTree = "<group>"; };
+		FBD237812DF61C1900A9B084 /* VisionLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionLibraryView.swift; sourceTree = "<group>"; };
+		FBD237832DF6201400A9B084 /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
+		FBD237852DF722F300A9B084 /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
+		FBD237872DF7D58E00A9B084 /* CameraPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPickerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		FBD237672DF6117E00A9B084 /* AIApp */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = AIApp;
-			sourceTree = "<group>";
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		FBD237622DF6117E00A9B084 /* Frameworks */ = {
@@ -32,7 +47,7 @@
 		FBD2375C2DF6117E00A9B084 = {
 			isa = PBXGroup;
 			children = (
-				FBD237672DF6117E00A9B084 /* AIApp */,
+				FBD237762DF6129A00A9B084 /* AIApp */,
 				FBD237662DF6117E00A9B084 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -43,6 +58,31 @@
 				FBD237652DF6117E00A9B084 /* AIApp.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		FBD237762DF6129A00A9B084 /* AIApp */ = {
+			isa = PBXGroup;
+			children = (
+				FBD237742DF6129A00A9B084 /* Assets.xcassets */,
+				FBD2377C2DF612A100A9B084 /* MLModels */,
+				FBD237872DF7D58E00A9B084 /* CameraPickerView.swift */,
+				FBD237832DF6201400A9B084 /* Enums.swift */,
+				FBD237812DF61C1900A9B084 /* VisionLibraryView.swift */,
+				FBD2377F2DF6131900A9B084 /* ModelsVM.swift */,
+				FBD237852DF722F300A9B084 /* UIImage.swift */,
+				FBD237752DF6129A00A9B084 /* ContentView.swift */,
+				FBD237732DF6129A00A9B084 /* AIApp.swift */,
+			);
+			path = AIApp;
+			sourceTree = "<group>";
+		};
+		FBD2377C2DF612A100A9B084 /* MLModels */ = {
+			isa = PBXGroup;
+			children = (
+				FBD2377A2DF612A100A9B084 /* Anime1.mlpackage */,
+				FBD2377B2DF612A100A9B084 /* FastViTT8F16.mlpackage */,
+			);
+			path = MLModels;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -59,9 +99,6 @@
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				FBD237672DF6117E00A9B084 /* AIApp */,
 			);
 			name = AIApp;
 			packageProductDependencies = (
@@ -109,6 +146,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FBD237792DF6129A00A9B084 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -119,6 +157,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FBD237772DF6129A00A9B084 /* AIApp.swift in Sources */,
+				FBD237862DF722F300A9B084 /* UIImage.swift in Sources */,
+				FBD237782DF6129A00A9B084 /* ContentView.swift in Sources */,
+				FBD2377D2DF612A100A9B084 /* Anime1.mlpackage in Sources */,
+				FBD2377E2DF612A100A9B084 /* FastViTT8F16.mlpackage in Sources */,
+				FBD237822DF61C1900A9B084 /* VisionLibraryView.swift in Sources */,
+				FBD237802DF6131900A9B084 /* ModelsVM.swift in Sources */,
+				FBD237842DF6201400A9B084 /* Enums.swift in Sources */,
+				FBD237882DF7D58E00A9B084 /* CameraPickerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -256,6 +303,7 @@
 				DEVELOPMENT_TEAM = 7GRZBU3W5C;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Necesito la cámara para tomar fotos.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -269,7 +317,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.cxcarvaj.AIApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -284,6 +332,7 @@
 				DEVELOPMENT_TEAM = 7GRZBU3W5C;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Necesito la cámara para tomar fotos.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -297,7 +346,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.cxcarvaj.AIApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
