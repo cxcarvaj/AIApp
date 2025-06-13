@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Vision
 
 //No se puede llamar `Observation` porque es palabra registrada del sistema
 struct Observations: Identifiable {
@@ -26,6 +27,12 @@ struct DetectedElements: Identifiable {
     let id = UUID()
     let label: String
     let points: [CGPoint]
+}
+
+struct DetectedElements18: Identifiable {
+    let id = UUID()
+    let label: String
+    let points: [NormalizedPoint]
 }
 
 enum CameraPosition: String, Identifiable, CaseIterable {

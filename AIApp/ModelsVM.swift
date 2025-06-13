@@ -57,6 +57,7 @@ final class ModelsVM {
 
     var observations: [Observations] = []
     var detectedObjects: [DetectedObjects] = []
+    var detectedElements18: [DetectedElements18] = []
     
     var errorMsg = ""
     var showAlert = false
@@ -150,6 +151,13 @@ final class ModelsVM {
             return {}
         case (.hands, .ios18):
             return { Task { await self.classifyImages() } }
+            
+        case (.animals, .vision):
+            return {}
+        case (.animals, .coreml):
+            return {}
+        case (.animals, .ios18):
+            return { Task { await self.findAnimals() } }
 
         case (.none, _):
             return {}
@@ -332,6 +340,47 @@ final class ModelsVM {
                                        confidence: 1.0,
                                        boundingBox: CGRect(),
                                        elements: elements)
+            }
+        } catch {
+            errorMsg = "Error en la predicción \(error)"
+            showAlert.toggle()
+        }
+    }
+    
+    func findAnimals() async {
+        do {
+            guard let image, let cgImage = image.cgImage else { return }
+            let request = DetectAnimalBodyPoseRequest()
+            let observations = try await request.perform(on: cgImage,
+                                                         orientation: .right)
+            detectedElements18 = observations.compactMap { obs in
+                let points = obs.allJoints()
+                    .values
+                    .filter { $0.confidence > 0.1 }
+                    .map(\.location)
+                
+                return DetectedElements18(label: "Animal",
+                                          points: points)
+            }
+        } catch {
+            errorMsg = "Error en la predicción \(error)"
+            showAlert.toggle()
+        }
+    }
+    
+    func findHands() async {
+        do {
+            guard let image, let cgImage = image.cgImage else { return }
+            let request = DetectHumanHandPoseRequest()
+            let observations = try await request.perform(on: cgImage)
+            detectedElements18 = observations.compactMap { obs in
+                let points = obs.allJoints()
+                    .values
+                    .filter { $0.confidence > 0.1 }
+                    .map(\.location)
+                
+                return DetectedElements18(label: "Mano",
+                                          points: points)
             }
         } catch {
             errorMsg = "Error en la predicción \(error)"

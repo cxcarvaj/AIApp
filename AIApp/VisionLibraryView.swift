@@ -137,6 +137,11 @@ struct VisionLibraryView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 10))
                     .rectanglesDetected(objects: $vm.detectedObjects,
                                         mirror: false)
+                    .applyIf(vm.selectedModel == .animals ||
+                             vm.selectedModel == .hands) { content in
+                        content.points18Detected(animals:
+                                                    vm.detectedElements18)
+                    }
             } else {
                 Image(systemName: "photo")
                     .resizable()

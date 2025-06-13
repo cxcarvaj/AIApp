@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsArbitraryLoadsForMedia</key>
+        <true/>
+    </dict>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Utilizamos el micrófono para capturar la sesión de habla del usuario.</string>
+    <key>NSSpeechRecognitionUsageDescription</key>
+    <string>Vamos a realizar tareas de transcripción de voz a texto.</string>
+</dict>
+</plist>

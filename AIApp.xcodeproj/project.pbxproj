@@ -11,6 +11,10 @@
 		FBA58F422DFC657D009AAB50 /* RectanglesDetected.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBA58F412DFC657D009AAB50 /* RectanglesDetected.swift */; };
 		FBA58F442DFC65F3009AAB50 /* HandDetected.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBA58F432DFC65F3009AAB50 /* HandDetected.swift */; };
 		FBA58F462DFC6622009AAB50 /* PiedraPapelTijera.mlpackage in Sources */ = {isa = PBXBuildFile; fileRef = FBA58F452DFC6622009AAB50 /* PiedraPapelTijera.mlpackage */; };
+		FBA58F4B2DFC68EB009AAB50 /* MainContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBA58F4A2DFC68EB009AAB50 /* MainContent.swift */; };
+		FBA58F4D2DFC6C2B009AAB50 /* Points18Detected.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBA58F4C2DFC6C2B009AAB50 /* Points18Detected.swift */; };
+		FBA58F4F2DFC6CDA009AAB50 /* AppleIntelligenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBA58F4E2DFC6CDA009AAB50 /* AppleIntelligenceView.swift */; };
+		FBA58F512DFC6D20009AAB50 /* AppleIntelligenceVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBA58F502DFC6D20009AAB50 /* AppleIntelligenceVM.swift */; };
 		FBAD1FA22DF9B4B00089935C /* Dados.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = FBAD1F9E2DF9B4B00089935C /* Dados.mlmodel */; };
 		FBAD1FA42DF9B4B00089935C /* YOLOv3Tiny.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = FBAD1FA12DF9B4B00089935C /* YOLOv3Tiny.mlmodel */; };
 		FBAD1FA62DF9B4B00089935C /* SuperHeroes.mlpackage in Sources */ = {isa = PBXBuildFile; fileRef = FBAD1FA02DF9B4B00089935C /* SuperHeroes.mlpackage */; };
@@ -36,6 +40,11 @@
 		FBA58F412DFC657D009AAB50 /* RectanglesDetected.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RectanglesDetected.swift; sourceTree = "<group>"; };
 		FBA58F432DFC65F3009AAB50 /* HandDetected.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandDetected.swift; sourceTree = "<group>"; };
 		FBA58F452DFC6622009AAB50 /* PiedraPapelTijera.mlpackage */ = {isa = PBXFileReference; lastKnownFileType = folder.mlpackage; path = PiedraPapelTijera.mlpackage; sourceTree = "<group>"; };
+		FBA58F492DFC6876009AAB50 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		FBA58F4A2DFC68EB009AAB50 /* MainContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainContent.swift; sourceTree = "<group>"; };
+		FBA58F4C2DFC6C2B009AAB50 /* Points18Detected.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Points18Detected.swift; sourceTree = "<group>"; };
+		FBA58F4E2DFC6CDA009AAB50 /* AppleIntelligenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleIntelligenceView.swift; sourceTree = "<group>"; };
+		FBA58F502DFC6D20009AAB50 /* AppleIntelligenceVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleIntelligenceVM.swift; sourceTree = "<group>"; };
 		FBAD1F9E2DF9B4B00089935C /* Dados.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = Dados.mlmodel; sourceTree = "<group>"; };
 		FBAD1FA02DF9B4B00089935C /* SuperHeroes.mlpackage */ = {isa = PBXFileReference; lastKnownFileType = folder.mlpackage; path = SuperHeroes.mlpackage; sourceTree = "<group>"; };
 		FBAD1FA12DF9B4B00089935C /* YOLOv3Tiny.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = YOLOv3Tiny.mlmodel; sourceTree = "<group>"; };
@@ -87,6 +96,7 @@
 		FBD237762DF6129A00A9B084 /* AIApp */ = {
 			isa = PBXGroup;
 			children = (
+				FBA58F492DFC6876009AAB50 /* Info.plist */,
 				FBD237742DF6129A00A9B084 /* Assets.xcassets */,
 				FBD2377C2DF612A100A9B084 /* MLModels */,
 				FBD237872DF7D58E00A9B084 /* CameraPickerView.swift */,
@@ -94,16 +104,20 @@
 				FBD237812DF61C1900A9B084 /* VisionLibraryView.swift */,
 				FBA58F432DFC65F3009AAB50 /* HandDetected.swift */,
 				FBD2377F2DF6131900A9B084 /* ModelsVM.swift */,
+				FBA58F4C2DFC6C2B009AAB50 /* Points18Detected.swift */,
 				FBAD1FAB2DF9C1AB0089935C /* PlayStyle.swift */,
 				FBAD1FAF2DF9C1DB0089935C /* VideoPlayerView.swift */,
 				FBAD1FAD2DF9C1C20089935C /* PlayerVideo.swift */,
 				FBA58F412DFC657D009AAB50 /* RectanglesDetected.swift */,
 				FBA58F3F2DFC6064009AAB50 /* ElementsDetected.swift */,
 				FBAD1FA72DF9B5550089935C /* Models.swift */,
+				FBA58F4A2DFC68EB009AAB50 /* MainContent.swift */,
 				FBD237852DF722F300A9B084 /* Extension.swift */,
 				FBAD1FA92DF9C16A0089935C /* CameraFeed.swift */,
 				FBD237752DF6129A00A9B084 /* ContentView.swift */,
 				FBD237732DF6129A00A9B084 /* AIApp.swift */,
+				FBA58F4E2DFC6CDA009AAB50 /* AppleIntelligenceView.swift */,
+				FBA58F502DFC6D20009AAB50 /* AppleIntelligenceVM.swift */,
 			);
 			path = AIApp;
 			sourceTree = "<group>";
@@ -207,12 +221,16 @@
 				FBA58F442DFC65F3009AAB50 /* HandDetected.swift in Sources */,
 				FBD237782DF6129A00A9B084 /* ContentView.swift in Sources */,
 				FBD2377D2DF612A100A9B084 /* Anime1.mlpackage in Sources */,
+				FBA58F4F2DFC6CDA009AAB50 /* AppleIntelligenceView.swift in Sources */,
 				FBD2377E2DF612A100A9B084 /* FastViTT8F16.mlpackage in Sources */,
 				FBD237822DF61C1900A9B084 /* VisionLibraryView.swift in Sources */,
+				FBA58F512DFC6D20009AAB50 /* AppleIntelligenceVM.swift in Sources */,
+				FBA58F4D2DFC6C2B009AAB50 /* Points18Detected.swift in Sources */,
 				FBD237802DF6131900A9B084 /* ModelsVM.swift in Sources */,
 				FBD237842DF6201400A9B084 /* Enums.swift in Sources */,
 				FBD237882DF7D58E00A9B084 /* CameraPickerView.swift in Sources */,
 				FBAD1FAA2DF9C16A0089935C /* CameraFeed.swift in Sources */,
+				FBA58F4B2DFC68EB009AAB50 /* MainContent.swift in Sources */,
 				FBAD1FAE2DF9C1C20089935C /* PlayerVideo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -351,6 +369,8 @@
 				DEVELOPMENT_TEAM = 7GRZBU3W5C;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AIApp/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Necesito la cámara para tomar fotos.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -380,6 +400,8 @@
 				DEVELOPMENT_TEAM = 7GRZBU3W5C;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AIApp/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Necesito la cámara para tomar fotos.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

@@ -15,7 +15,9 @@ enum Models: String, Identifiable, CaseIterable {
     case dados = "Dados"
     case faces = "Faces"
     case fullFaces = "Full Faces"
+    case animals = "Animals"
     case hands = "Hands"
+    
     case none = "None"
     
     var id: Self { self }
