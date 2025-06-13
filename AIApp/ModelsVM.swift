@@ -12,7 +12,29 @@ import PhotosUI
 
 @Observable @MainActor
 final class ModelsVM {
-    var frame: CVPixelBuffer?
+    let dadosModel = try? Dados().model
+    let yolo = try? YOLOv3Tiny(configuration: MLModelConfiguration()).model
+    
+    var frame: CVPixelBuffer? {
+        didSet {
+            if showFeed, let frame {
+                switch selectedModel {
+                case .yolo:
+                    performVisionObjectModelRealtime(model: yolo, buffer: frame)
+                case .dados:
+                    performVisionObjectModelRealtime(model: dadosModel, buffer: frame)
+                case .faces:
+                    performFaceDetection(buffer: frame)
+                case .fullFaces:
+                    performFullFaceDetection(buffer: frame)
+                case .hands:
+                    performHandDetection(buffer: frame)
+                default:()
+                }
+            }
+        }
+    }
+    
     var image: UIImage?
     var photoPicker: PhotosPickerItem? {
         didSet {
@@ -28,8 +50,11 @@ final class ModelsVM {
         }
     }
     
+    var showFeed = false
     var selectedModel: Models = .none
     var engine: ModelExecution = .vision
+    var cameraPosition: CameraPosition = .back
+
     var observations: [Observations] = []
     var detectedObjects: [DetectedObjects] = []
     
@@ -74,7 +99,7 @@ final class ModelsVM {
         case (.vision, .coreml):
             return performModelFastViT
         case (.vision, .ios18):
-            return { Task { await self.classifyImages() } }
+            return { Task { await self.classifyObjects() } }
             
         case (.yolo, .vision):
             let model = try YOLOv3Tiny(configuration: MLModelConfiguration())
@@ -90,6 +115,40 @@ final class ModelsVM {
         case (.dados, .coreml):
             return performModelYolov3
         case (.dados, .ios18):
+            return { Task { await self.classifyImages() } }
+            
+
+        case (.faces, .vision):
+            return {
+                if let buffer = self.image?.pixelBuffer {
+                    self.performFaceDetection(buffer: buffer)
+                }
+            }
+        case (.faces, .coreml):
+            return {}
+        case (.faces, .ios18):
+            return { Task { await self.classifyImages() } }
+            
+        case (.fullFaces, .vision):
+            return {
+                if let buffer = self.image?.pixelBuffer {
+                    self.performFullFaceDetection(buffer: buffer)
+                }
+            }
+        case (.fullFaces, .coreml):
+            return {}
+        case (.fullFaces, .ios18):
+            return { Task { await self.classifyImages() } }
+            
+        case (.hands, .vision):
+            return {
+                if let buffer = self.image?.pixelBuffer {
+                    self.performHandDetection(buffer: buffer)
+                }
+            }
+        case (.hands, .coreml):
+            return {}
+        case (.hands, .ios18):
             return { Task { await self.classifyImages() } }
 
         case (.none, _):
@@ -124,11 +183,155 @@ final class ModelsVM {
     func classifyObjects() async {
         do {
             guard let image, let cgImage = image.cgImage else { return }
-            var request = ClassifyImageRequest()
+            let model = try FastViTT8F16()
+            let container = try CoreMLModelContainer(model: model.model)
+            var request = CoreMLRequest(model: container)
             request.cropAndScaleAction = .centerCrop
             let results = try await request.perform(on: cgImage, orientation: .right)
-            observations = results.map { result in
+            observations = results.compactMap {
+                $0 as? ClassificationObservation
+            }.filter {
+                $0.confidence > 0.1
+            }.sorted {
+                $0.confidence > $1.confidence
+            }.map { result in
                 Observations(confidence: Double(result.confidence) * 100, label: result.identifier)
+            }
+        } catch {
+            errorMsg = "Error en la predicción \(error)"
+            showAlert.toggle()
+        }
+    }
+    
+    func performFaceDetection(buffer: CVPixelBuffer) {
+        do {
+            let request = VNDetectFaceRectanglesRequest()
+            let imageRequest = VNImageRequestHandler(cvPixelBuffer: buffer, orientation: .right)
+            try imageRequest.perform([request])
+            guard let results = request.results else { return }
+            var num = 0
+            detectedObjects = results.map { observation in
+                num += 1
+                return DetectedObjects(label: "Cara \(num)",
+                                       confidence: 1.0,
+                                       boundingBox: observation.boundingBox)
+            }
+        } catch {
+            errorMsg = "Error en la predicción \(error)"
+            showAlert.toggle()
+        }
+    }
+    
+    func performFullFaceDetection(buffer: CVPixelBuffer) {
+        do {
+            let request = VNDetectFaceLandmarksRequest()
+            let imageRequest = VNImageRequestHandler(cvPixelBuffer: buffer, orientation: .right)
+            try imageRequest.perform([request])
+            guard let results = request.results else { return }
+            var num = 0
+            detectedObjects = results.map { observation in
+                var elements: [DetectedElements] = []
+                if let lm = observation.landmarks?.faceContour {
+                    elements.append(DetectedElements(label: "Face Contour",
+                                                     points: lm.normalizedPoints))
+                }
+                if let lm = observation.landmarks?.leftEye {
+                    elements.append(DetectedElements(label: "Left Eye",
+                                                     points: lm.normalizedPoints))
+                }
+                if let lm = observation.landmarks?.rightEye {
+                    elements.append(DetectedElements(label: "Right Eye",
+                                                     points: lm.normalizedPoints))
+                }
+                if let lm = observation.landmarks?.leftEyebrow {
+                    elements.append(DetectedElements(label: "Left Eyebrow",
+                                                     points: lm.normalizedPoints))
+                }
+                if let lm = observation.landmarks?.rightEyebrow {
+                    elements.append(DetectedElements(label: "Right Eyebrow",
+                                                     points: lm.normalizedPoints))
+                }
+                if let lm = observation.landmarks?.nose {
+                    elements.append(DetectedElements(label: "Nose",
+                                                     points: lm.normalizedPoints))
+                }
+                if let lm = observation.landmarks?.noseCrest {
+                    elements.append(DetectedElements(label: "Nose Crest",
+                                                     points: lm.normalizedPoints))
+                }
+                if let lm = observation.landmarks?.outerLips {
+                    elements.append(DetectedElements(label: "Outer Lips",
+                                                     points: lm.normalizedPoints))
+                }
+                if let lm = observation.landmarks?.innerLips {
+                    elements.append(DetectedElements(label: "Inner Lips",
+                                                     points: lm.normalizedPoints))
+                }
+                if let lm = observation.landmarks?.leftPupil {
+                    elements.append(DetectedElements(label: "Left Pupil",
+                                                     points: lm.normalizedPoints))
+                }
+                if let lm = observation.landmarks?.rightPupil {
+                    elements.append(DetectedElements(label: "Right Pupil",
+                                                     points: lm.normalizedPoints))
+                }
+                if let lm = observation.landmarks?.medianLine {
+                    elements.append(DetectedElements(label: "Median Line",
+                                                     points: lm.normalizedPoints))
+                }
+                num += 1
+                return DetectedObjects(label: "Cara \(num)",
+                                       confidence: 1.0,
+                                       boundingBox: observation.boundingBox,
+                                       elements: elements)
+            }
+        } catch {
+            errorMsg = "Error en la predicción \(error)"
+            showAlert.toggle()
+        }
+    }
+    
+    func performHandDetection(buffer: CVPixelBuffer) {
+        do {
+            let request = VNDetectHumanHandPoseRequest()
+            let imageRequest = VNImageRequestHandler(cvPixelBuffer: buffer, orientation: .right)
+            try imageRequest.perform([request])
+            guard let results = request.results,
+                  let hand = results.first else { return }
+            let detection = try PiedraPapelTijera(configuration: MLModelConfiguration())
+            let prediction = try detection.prediction(poses: hand.keypointsMultiArray())
+            observations = prediction.labelProbabilities
+                .sorted { d1, d2 in
+                    d1.value > d2.value
+                }
+                .map { (key, value) in
+                    Observations(confidence: value * 100, label: key)
+                }
+            var num = 0
+            detectedObjects = try results.map { observation in
+                var elements: [DetectedElements] = []
+                let index = try observation.recognizedPoints(.indexFinger)
+                elements.append(DetectedElements(label: "Index",
+                                                 points: index.map(\.value.location)))
+                let little = try observation.recognizedPoints(.littleFinger)
+                elements.append(DetectedElements(label: "Little",
+                                                 points: little.map(\.value.location)))
+                let middle = try observation.recognizedPoints(.middleFinger)
+                elements.append(DetectedElements(label: "Middle",
+                                                 points: middle.map(\.value.location)))
+                let ring = try observation.recognizedPoints(.ringFinger)
+                elements.append(DetectedElements(label: "Ring",
+                                                 points: ring.map(\.value.location)))
+                let thumb = try observation.recognizedPoints(.thumb)
+                elements.append(DetectedElements(label: "Thumb",
+                                                 points: thumb.map(\.value.location)))
+                let wrist = try observation.recognizedPoint(.wrist)
+                elements.append(DetectedElements(label: "Wrist", points: [wrist.location]))
+                num += 1
+                return DetectedObjects(label: "Cara \(num)",
+                                       confidence: 1.0,
+                                       boundingBox: CGRect(),
+                                       elements: elements)
             }
         } catch {
             errorMsg = "Error en la predicción \(error)"
@@ -143,7 +346,7 @@ final class ModelsVM {
         do {
             let vnModel = try VNCoreMLModel(for: model)
             let request = VNCoreMLRequest(model: vnModel)
-            let imageRequest = VNImageRequestHandler(data: imageData, orientation: .right)
+            let imageRequest = VNImageRequestHandler(data: imageData)
             try imageRequest.perform([request])
             
             if let results = request.results {
@@ -153,6 +356,7 @@ final class ModelsVM {
                     .map {
                         Observations(confidence: Double($0.confidence) * 100, label: $0.identifier)
                     }
+                print(observations)
             }
         } catch {
             errorMsg = "Error en la predicción \(error)"
@@ -164,33 +368,53 @@ final class ModelsVM {
         guard let image,
               let resize = image.resizeImage(width: 299, height: 299),
               let imageData = resize.pngData() else { return }
-        
         do {
-            detectedObjects.removeAll()
+            detectedObjects.removeAll(keepingCapacity: true)
             let vnModel = try VNCoreMLModel(for: model)
             let request = VNCoreMLRequest(model: vnModel)
             let imageRequest = VNImageRequestHandler(data: imageData)
             try imageRequest.perform([request])
             
-            if let results = request.results {
-                detectedObjects = results
-                    .compactMap { $0 as? VNRecognizedObjectObservation }
-                    .compactMap { objObservation in
-                        let objects = objObservation.labels.sorted {
-                            $0.confidence > $1.confidence
-                        }
-                        return if let object = objects.first {
-                            DetectedObjects(label: object.identifier,
-                                            confidence: Double(object.confidence),
-                                            boundingBox: objObservation.boundingBox)
-                        } else {
-                            nil
-                        }
-                    }
-            }
+            calculateBounds(results: request.results)
         } catch {
             errorMsg = "Error en la predicción \(error)"
             showAlert.toggle()
+        }
+    }
+    
+    func performVisionObjectModelRealtime(model: MLModel?,
+                                          buffer: CVPixelBuffer) {
+        do {
+            guard let model else { return }
+            let vnModel = try VNCoreMLModel(for: model)
+            let request = VNCoreMLRequest(model: vnModel)
+            let imageRequest = VNImageRequestHandler(cvPixelBuffer: buffer, orientation: .right)
+            try imageRequest.perform([request])
+            
+            calculateBounds(results: request.results)
+        } catch {
+            errorMsg = "Error en la predicción \(error)"
+            showAlert.toggle()
+        }
+    }
+    
+    func calculateBounds(results: [VNObservation]?) {
+        if let results {
+            detectedObjects = results
+                .compactMap { $0 as? VNRecognizedObjectObservation }
+                .compactMap { observ in
+                    let objects = observ.labels.sorted {
+                        $0.confidence > $1.confidence
+                    }
+                    return if let object = objects.first {
+                        DetectedObjects(label: object.identifier,
+                                        confidence: Double(object.confidence),
+                                        boundingBox: observ.boundingBox)
+                    } else {
+                        nil
+                    }
+                }
+            
         }
     }
     
@@ -202,8 +426,8 @@ final class ModelsVM {
             let model = try FastViTT8F16()
             let prediction = try model.prediction(image: cvBuffer)
             observations = prediction.classLabel_probs
-                .sorted { dic1, dic2 in
-                    dic1.value > dic2.value
+                .sorted { d1, d2 in
+                    d1.value > d2.value
                 }
                 .map { (key, value) in
                     Observations(confidence: value * 100, label: key)
@@ -221,8 +445,8 @@ final class ModelsVM {
             let model = try Anime1()
             let prediction = try model.prediction(image: cvBuffer)
             observations = prediction.targetProbability
-                .sorted { dic1, dic2 in
-                    dic1.value > dic2.value
+                .sorted { d1, d2 in
+                    d1.value > d2.value
                 }
                 .map { (key, value) in
                     Observations(confidence: value * 100, label: key)
@@ -234,24 +458,24 @@ final class ModelsVM {
     }
     
     func performModelSuperHeroe() {
-         guard let image = image?.resizeImage(width: 360, height: 360),
-               let cvBuffer = image.pixelBuffer else { return }
-         do {
-             let model = try SuperHeroes()
-             let prediction = try model.prediction(image: cvBuffer)
-             observations = prediction.targetProbability
-                 .sorted { dic1, dic2 in
-                     dic1.value > dic2.value
-                 }
-                 .map { (key, value) in
-                     Observations(confidence: value * 100, label: key)
-                 }
-             print(observations)
-         } catch {
-             errorMsg = "Error en la predicción \(error)"
-             showAlert.toggle()
-         }
-     }
+        guard let image = image?.resizeImage(width: 360, height: 360),
+              let cvBuffer = image.pixelBuffer else { return }
+        do {
+            let model = try SuperHeroes()
+            let prediction = try model.prediction(image: cvBuffer)
+            observations = prediction.targetProbability
+                .sorted { d1, d2 in
+                    d1.value > d2.value
+                }
+                .map { (key, value) in
+                    Observations(confidence: value * 100, label: key)
+                }
+            print(observations)
+        } catch {
+            errorMsg = "Error en la predicción \(error)"
+            showAlert.toggle()
+        }
+    }
     
     func performModelYolov3() {
         guard let image = image?.resizeImage(width: 416, height: 416),
@@ -259,8 +483,8 @@ final class ModelsVM {
         do {
             let model = try YOLOv3Tiny(configuration: MLModelConfiguration())
             let _ = try model.prediction(image: cvBuffer,
-                                                  iouThreshold: nil,
-                                                  confidenceThreshold: 0.60)
+                                         iouThreshold: nil,
+                                         confidenceThreshold: 0.60)
             // TO DO
         } catch {
             errorMsg = "Error en la predicción \(error)"

@@ -1,0 +1,24 @@
+{
+    "fileFormatVersion": "1.0.0",
+    "itemInfoEntries": {
+        "12227F77-76DF-4CD2-87DC-E9604EAC21EE": {
+            "author": "com.apple.CoreML",
+            "description": "CoreML Model Specification",
+            "name": "PiedraPapelTijera.mlmodel",
+            "path": "com.apple.CoreML/PiedraPapelTijera.mlmodel"
+        },
+        "87C3EE72-A76F-4B02-9014-6CAF851C8BA0": {
+            "author": "com.apple.CoreML",
+            "description": "External FeatureDescription Overlay",
+            "name": "FeatureDescriptions.json",
+            "path": "com.apple.CoreML/FeatureDescriptions.json"
+        },
+        "92DABD62-CBCF-4605-8D6E-F73B9ACB6BB3": {
+            "author": "com.apple.CoreML",
+            "description": "External Metadata Overlay",
+            "name": "Metadata.json",
+            "path": "com.apple.CoreML/Metadata.json"
+        }
+    },
+    "rootModelIdentifier": "12227F77-76DF-4CD2-87DC-E9604EAC21EE"
+}

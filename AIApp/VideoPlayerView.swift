@@ -16,7 +16,7 @@ struct VideoPlayerView: View {
     
     var body: some View {
         VideoPlayerView()
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+//            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .overlay {
                 Button {
                     play.toggle()
@@ -27,7 +27,7 @@ struct VideoPlayerView: View {
                 }
                 .buttonStyle(.plain)
                 .font(.title)
-                .layoutPriority(1)
+//                .layoutPriority(1)
             }
     }
 }

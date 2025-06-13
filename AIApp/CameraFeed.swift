@@ -1,5 +1,5 @@
 //
-//  CameraFeedView.swift
+//  CameraFeed.swift
 //  AIApp
 //
 //  Created by Carlos Xavier Carvajal Villegas on 11/6/25.
@@ -16,6 +16,7 @@ struct CameraFeedView: UIViewControllerRepresentable {
     
     @Binding var frame: CVPixelBuffer?
     let cameraOn: Bool
+    let position: CameraPosition
     
     func makeUIViewController(context: Context) -> CameraFeedViewController {
         let camera = CameraFeedViewController(frame: $frame)
@@ -33,6 +34,7 @@ struct CameraFeedView: UIViewControllerRepresentable {
         } else {
             uiViewController.stopCapture()
         }
+        uiViewController.switchCamera(to: position)
     }
 }
 
@@ -42,6 +44,8 @@ final class CameraFeedViewController: UIViewController {
     var device: AVCaptureDevice!
     var previewLayer = AVCaptureVideoPreviewLayer()
     nonisolated let session = AVCaptureSession()
+    
+    var position: CameraPosition = .back
     
     private let queue = DispatchQueue.global(qos: .default)
     
@@ -56,12 +60,17 @@ final class CameraFeedViewController: UIViewController {
     }
     
     func initCapture() throws {
-        guard !session.isRunning,
-        let capture = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back) else { return }
-        self.device = capture
-        session.sessionPreset = .high
-        let input = try AVCaptureDeviceInput(device: device)
-        session.addInput(input)
+//        guard !session.isRunning,
+//        let capture = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back) else { return }
+//        self.device = capture
+//        session.sessionPreset = .high
+//        let input = try AVCaptureDeviceInput(device: device)
+//        session.addInput(input)
+        
+        guard !session.isRunning else { return }
+        session.sessionPreset = .hd1920x1080
+        try configureCamera(for: position)
+        
         let output = AVCaptureVideoDataOutput()
         output.setSampleBufferDelegate(self, queue: queue)
         output.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA]
@@ -70,6 +79,41 @@ final class CameraFeedViewController: UIViewController {
         previewLayer = AVCaptureVideoPreviewLayer(session: session)
         previewLayer.videoGravity = .resizeAspect
         view.layer.addSublayer(previewLayer)
+    }
+    
+    nonisolated func configureCamera(for position: CameraPosition) throws {
+        session.beginConfiguration()
+        session.inputs.forEach { input in
+            session.removeInput(input)
+        }
+        
+        let avPosition: AVCaptureDevice.Position = (position == .front) ? .front : .back
+        guard let device = AVCaptureDevice.default(.builtInWideAngleCamera,
+                                                   for: .video,
+                                                   position: avPosition) else {
+            session.commitConfiguration()
+            print("No se ha inicializado la cámara")
+            return
+        }
+        Task { @MainActor in
+            self.device = device
+        }
+        let newInput = try AVCaptureDeviceInput(device: device)
+        session.addInput(newInput)
+        session.commitConfiguration()
+    }
+    
+    func switchCamera(to position: CameraPosition) {
+        guard self.position != position else { return }
+        self.position = position
+        
+        queue.async {
+            do {
+                try self.configureCamera(for: position)
+            } catch {
+                print("Error \(error)")
+            }
+        }
     }
     
     func startCapture() {

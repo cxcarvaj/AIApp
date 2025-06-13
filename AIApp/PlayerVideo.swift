@@ -37,4 +37,8 @@ final class PlayerVideo: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         player?.play()
     }
+    
+    override func viewDidLayoutSubviews() {
+        view.layer.sublayers?.first?.frame = view.bounds
+    }
 }

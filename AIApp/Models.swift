@@ -19,4 +19,18 @@ struct DetectedObjects: Identifiable {
     let label: String
     let confidence: Double
     let boundingBox: CGRect
+    var elements: [DetectedElements] = []
+}
+
+struct DetectedElements: Identifiable {
+    let id = UUID()
+    let label: String
+    let points: [CGPoint]
+}
+
+enum CameraPosition: String, Identifiable, CaseIterable {
+    case front = "Front"
+    case back = "Back"
+    
+    var id: Self { self }
 }

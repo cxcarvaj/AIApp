@@ -11,7 +11,6 @@ import PhotosUI
 struct VisionLibraryView: View {
     @State private var vm = ModelsVM()
     @State private var showCamera = false
-    @State private var showFeed = false
     
     var body: some View {
         ScrollView {
@@ -19,13 +18,42 @@ struct VisionLibraryView: View {
                 Text("Image Classification")
                     .font(.title)
                 
-                if !showFeed {
+                if !vm.showFeed {
                     photo
                 } else {
-                    CameraFeedView(frame: $vm.frame, cameraOn: showFeed)
+                    CameraFeedView(frame: $vm.frame,
+                                   cameraOn: vm.showFeed,
+                                   position: vm.cameraPosition)
                         .clipShape(RoundedRectangle(cornerRadius: 10))
                         .frame(maxWidth: .infinity)
-                        .frame(height: 500)
+                        .frame(width: 230, height: 400)
+                        .overlay {
+                            Rectangle()
+                                .stroke(lineWidth: 5)
+                                .fill(.white)
+                        }
+                        .applyIf(vm.selectedModel != .hands || vm.selectedModel != .fullFaces) { content in
+                            content.rectanglesDetected(objects: $vm.detectedObjects,
+                                                       mirror: vm.cameraPosition == .front)
+                        }
+                        .applyIf(vm.selectedModel == .fullFaces) { content in
+                            content.elementsDetected(elements: vm.detectedObjects,
+                                                     mirrored: vm.cameraPosition == .front)
+                        }
+                        .applyIf(vm.selectedModel == .hands) { content in
+                            content.handDetected(hands: vm.detectedObjects,
+                                                 mirrored: vm.cameraPosition == .front)
+                        }
+                    
+                    Picker(selection: $vm.cameraPosition) {
+                        ForEach(CameraPosition.allCases) { position in
+                            Text(position.rawValue)
+                                .tag(position)
+                        }
+                    } label: {
+                        Text("Select camera")
+                    }
+                    .pickerStyle(.segmented)
                 }
                 
                 HStack {
@@ -38,7 +66,7 @@ struct VisionLibraryView: View {
                         Image(systemName: "camera")
                     }
                     Button {
-                        showFeed.toggle()
+                        vm.showFeed.toggle()
                     } label: {
                         Image(systemName: "video")
                     }
@@ -107,23 +135,8 @@ struct VisionLibraryView: View {
                     .resizable()
                     .scaledToFit()
                     .clipShape(RoundedRectangle(cornerRadius: 10))
-                    .overlay {
-                        GeometryReader { proxy in
-                            ForEach(vm.detectedObjects) { object in
-                                let rectangle = object.boundingBox.convertFromObservation(to: proxy.size)
-                                Rectangle()
-                                    .path(in: rectangle)
-                                    .stroke(Color.green, lineWidth: 2)
-                                    .overlay(alignment: .bottom) {
-                                        Text(object.label)
-                                            .font(.caption2)
-                                            .foregroundStyle(.green)
-                                            .position(x: rectangle.midX,
-                                                      y: rectangle.maxY - 10)
-                                    }
-                            }
-                        }
-                    }
+                    .rectanglesDetected(objects: $vm.detectedObjects,
+                                        mirror: false)
             } else {
                 Image(systemName: "photo")
                     .resizable()

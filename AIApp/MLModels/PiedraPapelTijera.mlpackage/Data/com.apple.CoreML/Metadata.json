@@ -1,0 +1,13 @@
+{
+  "MLModelCreatorDefinedKey" : {
+    "com.apple.coreml.model.preview.type" : "handPoseClassifier",
+    "Target Frame Rate" : "30.0",
+    "com.apple.createml.training.started" : "2025-06-05T21:06:29Z",
+    "com.apple.createml.training.finished" : "2025-06-05T21:20:28Z",
+    "com.apple.createml.app.tag" : "151.2",
+    "com.apple.createml.model.created" : "2025-06-05T21:20:28Z",
+    "com.apple.createml.app.version" : "6.2",
+    "Prediction Window Size" : "1"
+  },
+  "MLModelAuthorKey" : "Julio César Fernández Muñoz"
+}

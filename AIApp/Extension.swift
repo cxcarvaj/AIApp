@@ -5,7 +5,7 @@
 //  Created by Carlos Xavier Carvajal Villegas on 9/6/25.
 //
 
-import UIKit
+import SwiftUI
 import CoreImage
 import CoreImage.CIFilterBuiltins
 
@@ -92,8 +92,42 @@ extension CGRect {
         let invertY = CGAffineTransform(scaleX: 1.0, y: -1.0).translatedBy(x: 0, y: -size.height)
         return self.applying(scale).applying(invertY)
     }
+    
+    func mirrored(in width: CGFloat) -> CGRect {
+         var mirroredRect = self
+         mirroredRect.origin.x = width - self.origin.x - self.width
+         return mirroredRect
+     }
+}
+
+extension CGPoint {
+    static func + (p1: CGPoint, p2: CGPoint) -> CGPoint {
+        CGPoint(x: p1.x + p2.x, y: p1.y + p2.y)
+    }
+
+    func convertFromObservation(to size: CGSize) -> CGPoint {
+        let scale = CGAffineTransform.identity.scaledBy(x: size.width, y: size.height)
+        let invertY = CGAffineTransform(scaleX: 1.0, y: -1.0).translatedBy(x: 0, y: -size.height)
+        return self.applying(scale).applying(invertY)
+    }
+    
+    func mirrored(in width: CGFloat) -> CGPoint {
+        var mirroredRect = self
+        mirroredRect.x = width - self.x
+        return mirroredRect
+    }
 }
 
 extension URL {
     static let bunny = URL(string: "http://distribution.bbb3d.renderfarming.net/video/mp4/bbb_sunflower_1080p_60fps_normal.mp4")!
+}
+
+extension View {
+    @ViewBuilder func applyIf<T: View>(_ condition: Bool, transform: (Self) -> T) -> some View {
+        if condition {
+            transform(self)
+        } else {
+            self
+        }
+    }
 }
