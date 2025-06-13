@@ -1,0 +1,24 @@
+{
+    "fileFormatVersion": "1.0.0",
+    "itemInfoEntries": {
+        "0EA5E4C8-0429-4CAB-94B1-8667F70E8959": {
+            "author": "com.apple.CoreML",
+            "description": "External Metadata Overlay",
+            "name": "Metadata.json",
+            "path": "com.apple.CoreML/Metadata.json"
+        },
+        "914CF5BD-39B8-4681-A89D-7F25A57FB07F": {
+            "author": "com.apple.CoreML",
+            "description": "External FeatureDescription Overlay",
+            "name": "FeatureDescriptions.json",
+            "path": "com.apple.CoreML/FeatureDescriptions.json"
+        },
+        "F4FB0E42-0C92-48C1-A59A-51C6E87EB544": {
+            "author": "com.apple.CoreML",
+            "description": "CoreML Model Specification",
+            "name": "SuperHeroes.mlmodel",
+            "path": "com.apple.CoreML/SuperHeroes.mlmodel"
+        }
+    },
+    "rootModelIdentifier": "F4FB0E42-0C92-48C1-A59A-51C6E87EB544"
+}

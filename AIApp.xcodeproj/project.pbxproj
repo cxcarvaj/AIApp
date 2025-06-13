@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FBAD1FA22DF9B4B00089935C /* Dados.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = FBAD1F9E2DF9B4B00089935C /* Dados.mlmodel */; };
+		FBAD1FA42DF9B4B00089935C /* YOLOv3Tiny.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = FBAD1FA12DF9B4B00089935C /* YOLOv3Tiny.mlmodel */; };
+		FBAD1FA62DF9B4B00089935C /* SuperHeroes.mlpackage in Sources */ = {isa = PBXBuildFile; fileRef = FBAD1FA02DF9B4B00089935C /* SuperHeroes.mlpackage */; };
+		FBAD1FA82DF9B5550089935C /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBAD1FA72DF9B5550089935C /* Models.swift */; };
+		FBAD1FAA2DF9C16A0089935C /* CameraFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBAD1FA92DF9C16A0089935C /* CameraFeedView.swift */; };
+		FBAD1FAC2DF9C1AB0089935C /* PlayStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBAD1FAB2DF9C1AB0089935C /* PlayStyle.swift */; };
+		FBAD1FAE2DF9C1C20089935C /* PlayerVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBAD1FAD2DF9C1C20089935C /* PlayerVideoView.swift */; };
+		FBAD1FB02DF9C1DB0089935C /* VideoPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBAD1FAF2DF9C1DB0089935C /* VideoPlayerView.swift */; };
 		FBD237772DF6129A00A9B084 /* AIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBD237732DF6129A00A9B084 /* AIApp.swift */; };
 		FBD237782DF6129A00A9B084 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBD237752DF6129A00A9B084 /* ContentView.swift */; };
 		FBD237792DF6129A00A9B084 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FBD237742DF6129A00A9B084 /* Assets.xcassets */; };
@@ -15,11 +23,19 @@
 		FBD237802DF6131900A9B084 /* ModelsVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBD2377F2DF6131900A9B084 /* ModelsVM.swift */; };
 		FBD237822DF61C1900A9B084 /* VisionLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBD237812DF61C1900A9B084 /* VisionLibraryView.swift */; };
 		FBD237842DF6201400A9B084 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBD237832DF6201400A9B084 /* Enums.swift */; };
-		FBD237862DF722F300A9B084 /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBD237852DF722F300A9B084 /* UIImage.swift */; };
+		FBD237862DF722F300A9B084 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBD237852DF722F300A9B084 /* Extension.swift */; };
 		FBD237882DF7D58E00A9B084 /* CameraPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBD237872DF7D58E00A9B084 /* CameraPickerView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		FBAD1F9E2DF9B4B00089935C /* Dados.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = Dados.mlmodel; sourceTree = "<group>"; };
+		FBAD1FA02DF9B4B00089935C /* SuperHeroes.mlpackage */ = {isa = PBXFileReference; lastKnownFileType = folder.mlpackage; path = SuperHeroes.mlpackage; sourceTree = "<group>"; };
+		FBAD1FA12DF9B4B00089935C /* YOLOv3Tiny.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = YOLOv3Tiny.mlmodel; sourceTree = "<group>"; };
+		FBAD1FA72DF9B5550089935C /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		FBAD1FA92DF9C16A0089935C /* CameraFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraFeedView.swift; sourceTree = "<group>"; };
+		FBAD1FAB2DF9C1AB0089935C /* PlayStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayStyle.swift; sourceTree = "<group>"; };
+		FBAD1FAD2DF9C1C20089935C /* PlayerVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerVideoView.swift; sourceTree = "<group>"; };
+		FBAD1FAF2DF9C1DB0089935C /* VideoPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerView.swift; sourceTree = "<group>"; };
 		FBD237652DF6117E00A9B084 /* AIApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AIApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBD237732DF6129A00A9B084 /* AIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIApp.swift; sourceTree = "<group>"; };
 		FBD237742DF6129A00A9B084 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -29,7 +45,7 @@
 		FBD2377F2DF6131900A9B084 /* ModelsVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelsVM.swift; sourceTree = "<group>"; };
 		FBD237812DF61C1900A9B084 /* VisionLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionLibraryView.swift; sourceTree = "<group>"; };
 		FBD237832DF6201400A9B084 /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
-		FBD237852DF722F300A9B084 /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
+		FBD237852DF722F300A9B084 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		FBD237872DF7D58E00A9B084 /* CameraPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPickerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -69,7 +85,12 @@
 				FBD237832DF6201400A9B084 /* Enums.swift */,
 				FBD237812DF61C1900A9B084 /* VisionLibraryView.swift */,
 				FBD2377F2DF6131900A9B084 /* ModelsVM.swift */,
-				FBD237852DF722F300A9B084 /* UIImage.swift */,
+				FBAD1FAB2DF9C1AB0089935C /* PlayStyle.swift */,
+				FBAD1FAF2DF9C1DB0089935C /* VideoPlayerView.swift */,
+				FBAD1FAD2DF9C1C20089935C /* PlayerVideoView.swift */,
+				FBAD1FA72DF9B5550089935C /* Models.swift */,
+				FBD237852DF722F300A9B084 /* Extension.swift */,
+				FBAD1FA92DF9C16A0089935C /* CameraFeedView.swift */,
 				FBD237752DF6129A00A9B084 /* ContentView.swift */,
 				FBD237732DF6129A00A9B084 /* AIApp.swift */,
 			);
@@ -81,6 +102,9 @@
 			children = (
 				FBD2377A2DF612A100A9B084 /* Anime1.mlpackage */,
 				FBD2377B2DF612A100A9B084 /* FastViTT8F16.mlpackage */,
+				FBAD1F9E2DF9B4B00089935C /* Dados.mlmodel */,
+				FBAD1FA02DF9B4B00089935C /* SuperHeroes.mlpackage */,
+				FBAD1FA12DF9B4B00089935C /* YOLOv3Tiny.mlmodel */,
 			);
 			path = MLModels;
 			sourceTree = "<group>";
@@ -157,8 +181,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FBAD1FAC2DF9C1AB0089935C /* PlayStyle.swift in Sources */,
 				FBD237772DF6129A00A9B084 /* AIApp.swift in Sources */,
-				FBD237862DF722F300A9B084 /* UIImage.swift in Sources */,
+				FBAD1FA82DF9B5550089935C /* Models.swift in Sources */,
+				FBAD1FB02DF9C1DB0089935C /* VideoPlayerView.swift in Sources */,
+				FBD237862DF722F300A9B084 /* Extension.swift in Sources */,
+				FBAD1FA22DF9B4B00089935C /* Dados.mlmodel in Sources */,
+				FBAD1FA42DF9B4B00089935C /* YOLOv3Tiny.mlmodel in Sources */,
+				FBAD1FA62DF9B4B00089935C /* SuperHeroes.mlpackage in Sources */,
 				FBD237782DF6129A00A9B084 /* ContentView.swift in Sources */,
 				FBD2377D2DF612A100A9B084 /* Anime1.mlpackage in Sources */,
 				FBD2377E2DF612A100A9B084 /* FastViTT8F16.mlpackage in Sources */,
@@ -166,6 +196,8 @@
 				FBD237802DF6131900A9B084 /* ModelsVM.swift in Sources */,
 				FBD237842DF6201400A9B084 /* Enums.swift in Sources */,
 				FBD237882DF7D58E00A9B084 /* CameraPickerView.swift in Sources */,
+				FBAD1FAA2DF9C16A0089935C /* CameraFeedView.swift in Sources */,
+				FBAD1FAE2DF9C1C20089935C /* PlayerVideoView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

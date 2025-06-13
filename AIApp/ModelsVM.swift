@@ -12,6 +12,7 @@ import PhotosUI
 
 @Observable @MainActor
 final class ModelsVM {
+    var frame: CVPixelBuffer?
     var image: UIImage?
     var photoPicker: PhotosPickerItem? {
         didSet {
@@ -30,6 +31,7 @@ final class ModelsVM {
     var selectedModel: Models = .none
     var engine: ModelExecution = .vision
     var observations: [Observations] = []
+    var detectedObjects: [DetectedObjects] = []
     
     var errorMsg = ""
     var showAlert = false
@@ -57,6 +59,15 @@ final class ModelsVM {
             return performModelAnime
         case (.anime1, .ios18):
             return { Task { await self.classifyImages() } }
+            
+        case (.superHeroe, .vision):
+            let model = try SuperHeroes()
+            return { self.performVisionModel(model: model.model) }
+        case (.superHeroe, .coreml):
+            return performModelSuperHeroe
+        case (.superHeroe, .ios18):
+            return { Task { await self.classifyImages() } }
+
         case (.vision, .vision):
             let model = try FastViTT8F16()
             return { self.performVisionModel(model: model.model) }
@@ -64,6 +75,23 @@ final class ModelsVM {
             return performModelFastViT
         case (.vision, .ios18):
             return { Task { await self.classifyImages() } }
+            
+        case (.yolo, .vision):
+            let model = try YOLOv3Tiny(configuration: MLModelConfiguration())
+            return { self.performVisionObjectModel(model: model.model) }
+        case (.yolo, .coreml):
+            return performModelYolov3
+        case (.yolo, .ios18):
+            return { Task { await self.classifyImages() } }
+
+        case (.dados, .vision):
+            let model = try Dados()
+            return { self.performVisionObjectModel(model: model.model) }
+        case (.dados, .coreml):
+            return performModelYolov3
+        case (.dados, .ios18):
+            return { Task { await self.classifyImages() } }
+
         case (.none, _):
             return {}
         }
@@ -83,7 +111,7 @@ final class ModelsVM {
             request.cropAndScaleAction = .scaleToFillPlus90CCWRotation
             let results = try await request.perform(on: cgImage, orientation: .right)
             observations = results.map({ result in
-                Observations(confidence: result.confidence, label: result.identifier)
+                Observations(confidence: Double(result.confidence) * 100, label: result.identifier)
             })
         } catch {
             print("Error al clasificar la imagen: \(error)")
@@ -92,6 +120,22 @@ final class ModelsVM {
         }
                 
     }
+    
+    func classifyObjects() async {
+        do {
+            guard let image, let cgImage = image.cgImage else { return }
+            var request = ClassifyImageRequest()
+            request.cropAndScaleAction = .centerCrop
+            let results = try await request.perform(on: cgImage, orientation: .right)
+            observations = results.map { result in
+                Observations(confidence: Double(result.confidence) * 100, label: result.identifier)
+            }
+        } catch {
+            errorMsg = "Error en la predicción \(error)"
+            showAlert.toggle()
+        }
+    }
+    
     func performVisionModel(model: MLModel) {
         //API antigua que sí permite usar nuestros propios modelos
         guard let image,
@@ -107,7 +151,7 @@ final class ModelsVM {
                     .compactMap { $0 as? VNClassificationObservation }
                     .sorted { $0.confidence > $1.confidence }
                     .map {
-                        Observations(confidence: $0.confidence * 100, label: $0.identifier)
+                        Observations(confidence: Double($0.confidence) * 100, label: $0.identifier)
                     }
             }
         } catch {
@@ -115,6 +159,41 @@ final class ModelsVM {
             showAlert.toggle()
         }
     }
+    
+    func performVisionObjectModel(model: MLModel) {
+        guard let image,
+              let resize = image.resizeImage(width: 299, height: 299),
+              let imageData = resize.pngData() else { return }
+        
+        do {
+            detectedObjects.removeAll()
+            let vnModel = try VNCoreMLModel(for: model)
+            let request = VNCoreMLRequest(model: vnModel)
+            let imageRequest = VNImageRequestHandler(data: imageData)
+            try imageRequest.perform([request])
+            
+            if let results = request.results {
+                detectedObjects = results
+                    .compactMap { $0 as? VNRecognizedObjectObservation }
+                    .compactMap { objObservation in
+                        let objects = objObservation.labels.sorted {
+                            $0.confidence > $1.confidence
+                        }
+                        return if let object = objects.first {
+                            DetectedObjects(label: object.identifier,
+                                            confidence: Double(object.confidence),
+                                            boundingBox: objObservation.boundingBox)
+                        } else {
+                            nil
+                        }
+                    }
+            }
+        } catch {
+            errorMsg = "Error en la predicción \(error)"
+            showAlert.toggle()
+        }
+    }
+    
     
     func performModelFastViT() {
         guard let image = image?.resizeImage(width: 256, height: 256),
@@ -127,7 +206,7 @@ final class ModelsVM {
                     dic1.value > dic2.value
                 }
                 .map { (key, value) in
-                    Observations(confidence: Float(value * 100), label: key)
+                    Observations(confidence: value * 100, label: key)
                 }
         } catch {
             errorMsg = "Error en la predicción \(error)"
@@ -146,8 +225,43 @@ final class ModelsVM {
                     dic1.value > dic2.value
                 }
                 .map { (key, value) in
-                    Observations(confidence: Float(value * 100), label: key)
+                    Observations(confidence: value * 100, label: key)
                 }
+        } catch {
+            errorMsg = "Error en la predicción \(error)"
+            showAlert.toggle()
+        }
+    }
+    
+    func performModelSuperHeroe() {
+         guard let image = image?.resizeImage(width: 360, height: 360),
+               let cvBuffer = image.pixelBuffer else { return }
+         do {
+             let model = try SuperHeroes()
+             let prediction = try model.prediction(image: cvBuffer)
+             observations = prediction.targetProbability
+                 .sorted { dic1, dic2 in
+                     dic1.value > dic2.value
+                 }
+                 .map { (key, value) in
+                     Observations(confidence: value * 100, label: key)
+                 }
+             print(observations)
+         } catch {
+             errorMsg = "Error en la predicción \(error)"
+             showAlert.toggle()
+         }
+     }
+    
+    func performModelYolov3() {
+        guard let image = image?.resizeImage(width: 416, height: 416),
+              let cvBuffer = image.pixelBuffer else { return }
+        do {
+            let model = try YOLOv3Tiny(configuration: MLModelConfiguration())
+            let _ = try model.prediction(image: cvBuffer,
+                                                  iouThreshold: nil,
+                                                  confidenceThreshold: 0.60)
+            // TO DO
         } catch {
             errorMsg = "Error en la predicción \(error)"
             showAlert.toggle()

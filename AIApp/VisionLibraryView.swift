@@ -11,23 +11,21 @@ import PhotosUI
 struct VisionLibraryView: View {
     @State private var vm = ModelsVM()
     @State private var showCamera = false
+    @State private var showFeed = false
     
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
                 Text("Image Classification")
                     .font(.title)
-                if let image = vm.image {
-                    Image(uiImage: image)
-                        .resizable()
-                        .scaledToFit()
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                
+                if !showFeed {
+                    photo
                 } else {
-                    Image(systemName: "photo")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 250)
-                        .foregroundStyle(.secondary)
+                    CameraFeedView(frame: $vm.frame, cameraOn: showFeed)
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 500)
                 }
                 
                 HStack {
@@ -38,6 +36,11 @@ struct VisionLibraryView: View {
                         showCamera.toggle()
                     } label: {
                         Image(systemName: "camera")
+                    }
+                    Button {
+                        showFeed.toggle()
+                    } label: {
+                        Image(systemName: "video")
                     }
                 }
                 .symbolVariant(.fill)
@@ -67,7 +70,7 @@ struct VisionLibraryView: View {
                     Text("Elige el motor")
                 }
                 .pickerStyle(.segmented)
-
+                
                 Button {
                     vm.arise()
                 } label: {
@@ -85,15 +88,49 @@ struct VisionLibraryView: View {
                             Text(observation.label)
                                 .font(.headline)
                             Spacer()
-                            Text("\(observation.confidence.formatted(.number.precision(.integerAndFractionLength(integer: 2, fraction: 2))))%")
+                            Text("\(observation.confidence)%")
                         }
                     }
                 }
             }
+            .safeAreaPadding()
+            .fullScreenCover(isPresented: $showCamera) {
+                CameraPickerView(photo: $vm.image)
+            }
         }
-        .safeAreaPadding()
-        .fullScreenCover(isPresented: $showCamera) {
-            CameraPickerView(photo: $vm.image)
+    }
+    
+    var photo: some View {
+        VStack {
+            if let image = vm.image {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFit()
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .overlay {
+                        GeometryReader { proxy in
+                            ForEach(vm.detectedObjects) { object in
+                                let rectangle = object.boundingBox.convertFromObservation(to: proxy.size)
+                                Rectangle()
+                                    .path(in: rectangle)
+                                    .stroke(Color.green, lineWidth: 2)
+                                    .overlay(alignment: .bottom) {
+                                        Text(object.label)
+                                            .font(.caption2)
+                                            .foregroundStyle(.green)
+                                            .position(x: rectangle.midX,
+                                                      y: rectangle.maxY - 10)
+                                    }
+                            }
+                        }
+                    }
+            } else {
+                Image(systemName: "photo")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 250)
+                    .foregroundStyle(.secondary)
+            }
         }
     }
 }
